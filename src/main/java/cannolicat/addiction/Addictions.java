@@ -36,6 +36,11 @@ public enum Addictions {
     PSYCHO(new PotionEffect[]{
             new PotionEffect(PotionEffectType.WEAKNESS, 1200, 0),
             new PotionEffect(PotionEffectType.SLOW, 1200, 0),
+    }),
+    METHAMPHETAMINE(new PotionEffect[]{
+            new PotionEffect(PotionEffectType.WEAKNESS, 1200, 1),
+            new PotionEffect(PotionEffectType.SLOW, 800, 1),
+            new PotionEffect(PotionEffectType.HUNGER, 1200, 1)
     });
 
     private final PotionEffect[] effects;

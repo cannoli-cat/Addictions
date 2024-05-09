@@ -42,7 +42,7 @@ public class AddAddiction implements CommandExecutor, TabCompleter, AddictedList
                     if(commandSender instanceof Player)
                         commandSender.sendMessage(player.getDisplayName() + ChatColor.GREEN + " is now addicted to " + ChatColor.RED + addictionToAdd + ChatColor.RESET + "!");
                     else
-                        Bukkit.getLogger().warning(player.getDisplayName() + " is now addicted to " + addictionToAdd + "!");
+                        Bukkit.getLogger().info("[Addiction] " + player.getDisplayName() + " is now addicted to " + addictionToAdd + "!");
                     Addiction.addicted.triggerAddiction(player, data);
                 }
             } else {
@@ -54,7 +54,7 @@ public class AddAddiction implements CommandExecutor, TabCompleter, AddictedList
                 if(commandSender instanceof Player)
                     commandSender.sendMessage(player.getDisplayName() + ChatColor.GREEN + " is now addicted to " + ChatColor.RED + addictionToAdd + ChatColor.RESET + "!");
                 else
-                    Bukkit.getLogger().warning(player.getDisplayName() + " is now addicted to " + addictionToAdd + "!");
+                    Bukkit.getLogger().info("[Addiction] " + player.getName() + " is now addicted to " + addictionToAdd + "!");
 
                 Addiction.addicted.triggerAddiction(player, data);
             }
@@ -64,7 +64,7 @@ public class AddAddiction implements CommandExecutor, TabCompleter, AddictedList
                 sender.sendMessage(ChatColor.RED + "You must specify a player and addiction to add!");
             }
             else {
-                Bukkit.getLogger().warning("You must specify a player and addiction to add!");
+                Bukkit.getLogger().warning("[Addiction] You must specify a player and addiction to add!");
             }
         }
         return true;
@@ -84,9 +84,10 @@ public class AddAddiction implements CommandExecutor, TabCompleter, AddictedList
     @Override
     public void onAddicted(Player p, AddictionData data) {
         if(Addiction.getPlugin().addicts.containsKey(p.getUniqueId())) {
+            p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You are addicted to " + data.getKey().toString().toLowerCase() + "...");
             int id = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Addiction.getPlugin(), () -> {
                 long difHours = TimeUnit.MILLISECONDS.toHours(new Date().getTime() - data.getDate().getTime());
-                if(difHours < 2) {
+                if(!(difHours >= 2)) {
                     p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC +
                             "You start to feel withdrawal effects from " + data.getKey().toString().toLowerCase() + "...");
 
@@ -99,7 +100,7 @@ public class AddAddiction implements CommandExecutor, TabCompleter, AddictedList
                             "You are no longer addicted to " + data.getKey().toString().toLowerCase() + "!");
                     Addiction.getPlugin().removeAddiction(p, data.getKey());
                 }
-            }, 0, 36000);
+            }, 36000, 36000);
             if(Addiction.getPlugin().ids.containsKey(p)) {
                 Addiction.getPlugin().ids.get(p).put(data.getKey(), id);
             } else {

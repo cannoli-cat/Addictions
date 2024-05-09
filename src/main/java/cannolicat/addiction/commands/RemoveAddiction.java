@@ -32,7 +32,7 @@ public class RemoveAddiction implements CommandExecutor, TabCompleter {
                     if(commandSender instanceof Player)
                         commandSender.sendMessage(player.getDisplayName() + ChatColor.GREEN + " has had their " + addictionToRemove + " addiction removed!");
                     else
-                        Bukkit.getLogger().warning(player.getDisplayName() + " has had their " + addictionToRemove + " addiction removed!");
+                        Bukkit.getLogger().info("[Addiction] " + player.getName() + " has had their " + addictionToRemove + " addiction removed!");
 
                     Bukkit.getScheduler().cancelTask(Addiction.getPlugin().ids.get(player).get(addictionToRemove));
                     player.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC +
@@ -41,13 +41,13 @@ public class RemoveAddiction implements CommandExecutor, TabCompleter {
                     if(commandSender instanceof Player)
                         commandSender.sendMessage(player.getDisplayName() + ChatColor.RED + " does not have a " + addictionToRemove + " addiction!");
                     else
-                        Bukkit.getLogger().warning(player.getDisplayName() + " does not have a " + addictionToRemove + " addiction!");
+                        Bukkit.getLogger().warning("[Addiction] " + player.getName() + " does not have a " + addictionToRemove + " addiction!");
                 }
             } else {
                 if (commandSender instanceof Player)
                     commandSender.sendMessage(ChatColor.RED + "This player is not an addict!");
                 else
-                    Bukkit.getLogger().warning("This player is not an addict!");
+                    Bukkit.getLogger().warning("[Addiction] This player is not an addict!");
             }
         } else {
             if(commandSender instanceof Player) {
@@ -55,7 +55,7 @@ public class RemoveAddiction implements CommandExecutor, TabCompleter {
                 player.sendMessage(ChatColor.RED + "You must specify a player and addiction to remove!");
             }
             else {
-                Bukkit.getLogger().warning("You must specify a player and addiction to remove!");
+                Bukkit.getLogger().warning("[Addiction] You must specify a player and addiction to remove!");
             }
         }
         return true;

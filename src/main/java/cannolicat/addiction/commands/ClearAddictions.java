@@ -8,10 +8,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class RemoveAddictions implements CommandExecutor {
+public class ClearAddictions implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-        if (command.getName().equalsIgnoreCase("removeaddictions") && strings.length == 1) {
+        if (command.getName().equalsIgnoreCase("clearaddictions") && strings.length == 1) {
             Player player = Bukkit.getServer().getPlayer(strings[0]);
 
             assert player != null;
@@ -22,7 +22,7 @@ public class RemoveAddictions implements CommandExecutor {
                 if(commandSender instanceof Player)
                     commandSender.sendMessage(player.getDisplayName() + ChatColor.GREEN + "'s addictions have been cleared!");
                 else
-                    Bukkit.getLogger().warning(player.getDisplayName() + "'s addictions have been cleared!");
+                    Bukkit.getLogger().info("[Addiction] " + player.getDisplayName() + "'s addictions have been cleared!");
 
                 for(int id : Addiction.getPlugin().ids.get(player).values()) {
                     Bukkit.getScheduler().cancelTask(id);
@@ -34,7 +34,7 @@ public class RemoveAddictions implements CommandExecutor {
                 if (commandSender instanceof Player)
                     commandSender.sendMessage(ChatColor.RED + "This player is not an addict!");
                 else
-                    Bukkit.getLogger().warning("This player is not an addict!");
+                    Bukkit.getLogger().warning("[Addiction] This player is not an addict!");
             }
         } else {
             if(commandSender instanceof Player) {
@@ -42,7 +42,7 @@ public class RemoveAddictions implements CommandExecutor {
                 player.sendMessage(ChatColor.RED + "You must specify a player to clear addictions for!");
             }
             else {
-                Bukkit.getLogger().warning("You must specify a player to clear addictions for!");
+                Bukkit.getLogger().warning("[Addiction] You must specify a player to clear addictions for!");
             }
         }
         return true;

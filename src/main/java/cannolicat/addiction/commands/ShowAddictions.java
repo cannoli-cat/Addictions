@@ -28,12 +28,12 @@ public class ShowAddictions implements CommandExecutor {
                 if (commandSender instanceof Player)
                     commandSender.sendMessage(message + ".");
                 else
-                    Bukkit.getLogger().warning(message + ".");
+                    Bukkit.getLogger().info("[Addiction] " + message + ".");
             } else {
                 if (commandSender instanceof Player)
                     commandSender.sendMessage(ChatColor.RED + "This player is not an addict!");
                 else
-                    Bukkit.getLogger().warning("This player is not an addict!");
+                    Bukkit.getLogger().warning("[Addiction] This player is not an addict!");
             }
         } else {
             if(commandSender instanceof Player) {
@@ -41,7 +41,7 @@ public class ShowAddictions implements CommandExecutor {
                 player.sendMessage(ChatColor.RED + "You must specify a player to show the addictions!");
             }
             else {
-                Bukkit.getLogger().warning("You must specify a player to show the addictions!");
+                Bukkit.getLogger().warning("[Addiction] You must specify a player to show the addictions!");
             }
         }
         return true;

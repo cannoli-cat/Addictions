@@ -41,7 +41,7 @@ public class PlayerEventHandler implements Listener {
         for(AddictionData data : Addiction.getPlugin().addicts.get(p.getUniqueId()).values()) {
             int id = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Addiction.getPlugin(), () -> {
                 long difHours = TimeUnit.MILLISECONDS.toHours(new Date().getTime() - data.getDate().getTime());
-                if(difHours < 2) {
+                if(!(difHours >= 2)) {
                     p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC +
                             "You start to feel withdrawal effects from " + data.getKey().toString().toLowerCase() + "...");
 

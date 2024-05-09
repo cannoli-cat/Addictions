@@ -27,7 +27,7 @@ public final class Addiction extends JavaPlugin {
         getCommand("addaddiction").setExecutor(addiction);
         getCommand("showaddictions").setExecutor(new ShowAddictions());
         getCommand("removeaddiction").setExecutor(new RemoveAddiction());
-        getCommand("removeaddictions").setExecutor(new RemoveAddictions());
+        getCommand("removeaddictions").setExecutor(new ClearAddictions());
 
         getServer().getPluginManager().registerEvents(new PlayerEventHandler(), this);
 
