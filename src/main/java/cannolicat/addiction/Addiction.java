@@ -38,7 +38,12 @@ public final class Addiction extends JavaPlugin {
             Bukkit.getLogger().info("[Addiction] Found saved data... attempting to load...");
             addicts = loadAddicts();
             Bukkit.getLogger().info("[Addiction] Successfully loaded saved data!");
-        } else {
+        }
+    }
+
+    @Override
+    public void onDisable() {
+        if(!file.exists() && !addicts.isEmpty()) {
             try {
                 file.getParentFile().mkdirs();
                 if (file.createNewFile()) {
@@ -49,11 +54,8 @@ public final class Addiction extends JavaPlugin {
                 e.printStackTrace();
             }
         }
-    }
 
-    @Override
-    public void onDisable() {
-        if(!addicts.isEmpty()) {
+        if(!addicts.isEmpty() && file.exists()) {
             if (saveAddicts()) Bukkit.getLogger().info("[Addiction] Successfully saved data!");
             else Bukkit.getLogger().severe("[Addiction] Could not save data!");
         } else {
@@ -105,7 +107,8 @@ public final class Addiction extends JavaPlugin {
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
 
-            list = (HashMap<UUID, HashMap<Addictions, AddictionData>>) ois.readObject();
+            if(file.length() != 0) list = (HashMap<UUID, HashMap<Addictions, AddictionData>>) ois.readObject();
+            else list = new HashMap<>();
 
             ois.close();
             fis.close();
