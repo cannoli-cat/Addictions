@@ -4,6 +4,7 @@ import cannolicat.addiction.Addiction;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -15,7 +16,7 @@ public class ClearAddictions implements CommandExecutor {
             Player player;
             try {
                 player = Bukkit.getServer().getPlayer(strings[0]);
-            } catch (IllegalArgumentException e) {
+            } catch (CommandException e) {
                 if(commandSender instanceof Player) {
                     commandSender.sendMessage(ChatColor.RED + "You must enter a valid player!");
                     return true;

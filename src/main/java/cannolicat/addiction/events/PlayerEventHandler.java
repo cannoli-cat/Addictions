@@ -14,6 +14,7 @@ import org.bukkit.potion.PotionEffect;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class PlayerEventHandler implements Listener {
@@ -53,7 +54,7 @@ public class PlayerEventHandler implements Listener {
                             "You are no longer addicted to " + data.getKey().toString().toLowerCase() + "!");
                     Addiction.getPlugin().removeAddiction(p, data.getKey());
                 }
-            }, i * 200L, 36000);
+            }, i * new Random().nextLong(6000), 36000);
             ids.put(data.getKey(), id);
             i++;
         }

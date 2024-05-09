@@ -4,10 +4,7 @@ import cannolicat.addiction.Addiction;
 import cannolicat.addiction.Addictions;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -21,7 +18,7 @@ public class RemoveAddiction implements CommandExecutor, TabCompleter {
             Player player;
             try {
                 player = Bukkit.getServer().getPlayer(strings[0]);
-            } catch (IllegalArgumentException e) {
+            } catch (CommandException e) {
                 if(commandSender instanceof Player) {
                     commandSender.sendMessage(ChatColor.RED + "You must enter a valid player!");
                     return true;
