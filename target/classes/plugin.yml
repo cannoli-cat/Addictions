@@ -1,0 +1,21 @@
+name: Addiction
+version: '1.0-SNAPSHOT'
+main: cannolicat.addiction.Addiction
+api-version: '1.20'
+commands:
+  addAddiction:
+    description: Add an addiction to a player!
+    permission: addiction.add
+    usage: /<command> <player> <addiction>
+  removeAddiction:
+    description: Remove an addiction from a player!
+    permission: addiction.remove
+    usage: /<command> <player> <addiction>
+  removeAddictions:
+    description: Removes all addictions from a player!
+    permission: addiction.remove
+    usage: /<command> <player>
+  showAddictions:
+    description: View a players current addictions!
+    permission: addiction.show
+    usage: /<command> <player>
