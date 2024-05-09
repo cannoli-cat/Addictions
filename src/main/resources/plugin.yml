@@ -7,11 +7,11 @@ commands:
     description: Add an addiction to a player!
     permission: addiction.add
     usage: /<command> <player> <addiction>
-  clearAddictions:
+  removeAddiction:
     description: Remove an addiction from a player!
-    permission: addiction.clear
+    permission: addiction.remove
     usage: /<command> <player> <addiction>
-  removeAddictions:
+  clearAddictions:
     description: Removes all addictions from a player!
     permission: addiction.remove
     usage: /<command> <player>
