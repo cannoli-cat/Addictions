@@ -16,13 +16,12 @@ public class ClearAddictions implements CommandExecutor {
 
             assert player != null;
             if (Addiction.getPlugin().addicts.containsKey(player.getUniqueId())) {
-
                 Addiction.getPlugin().addicts.remove(player.getUniqueId());
 
                 if(commandSender instanceof Player)
                     commandSender.sendMessage(player.getDisplayName() + ChatColor.GREEN + "'s addictions have been cleared!");
                 else
-                    Bukkit.getLogger().info("[Addiction] " + player.getDisplayName() + "'s addictions have been cleared!");
+                    Bukkit.getLogger().info("[Addiction] " + player.getName() + "'s addictions have been cleared!");
 
                 for(int id : Addiction.getPlugin().ids.get(player).values()) {
                     Bukkit.getScheduler().cancelTask(id);

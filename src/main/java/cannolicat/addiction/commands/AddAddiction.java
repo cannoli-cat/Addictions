@@ -21,7 +21,18 @@ public class AddAddiction implements CommandExecutor, TabCompleter, AddictedList
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         if (command.getName().equalsIgnoreCase("addaddiction") && strings.length == 2) {
             Player player = Bukkit.getServer().getPlayer(strings[0]);
-            Addictions addictionToAdd = Addictions.valueOf(strings[1]);
+            Addictions addictionToAdd;
+            try {
+                addictionToAdd = Addictions.valueOf(strings[1].toUpperCase());
+            } catch (IllegalArgumentException e) {
+                if(commandSender instanceof Player) {
+                    commandSender.sendMessage(ChatColor.RED + "You must enter a valid addiction!");
+                    return true;
+                } else {
+                    Bukkit.getLogger().warning("[Addiction] You must enter a valid addiction!");
+                    return true;
+                }
+            }
 
             assert player != null;
             if (Addiction.getPlugin().addicts.containsKey(player.getUniqueId())) {

@@ -28,7 +28,7 @@ public class ShowAddictions implements CommandExecutor {
                 if (commandSender instanceof Player)
                     commandSender.sendMessage(message + ".");
                 else
-                    Bukkit.getLogger().info("[Addiction] " + message + ".");
+                    Bukkit.getLogger().info("[Addiction] " + ChatColor.stripColor(message.toString()) + ".");
             } else {
                 if (commandSender instanceof Player)
                     commandSender.sendMessage(ChatColor.RED + "This player is not an addict!");

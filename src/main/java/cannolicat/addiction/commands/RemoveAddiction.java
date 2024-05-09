@@ -19,7 +19,18 @@ public class RemoveAddiction implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         if (command.getName().equalsIgnoreCase("removeaddiction") && strings.length == 2) {
             Player player = Bukkit.getServer().getPlayer(strings[0]);
-            Addictions addictionToRemove = Addictions.valueOf(strings[1]);
+            Addictions addictionToRemove;
+            try {
+                addictionToRemove = Addictions.valueOf(strings[1].toUpperCase());
+            } catch (IllegalArgumentException e) {
+                if(commandSender instanceof Player) {
+                    commandSender.sendMessage(ChatColor.RED + "You must enter a valid addiction!");
+                    return true;
+                } else {
+                    Bukkit.getLogger().warning("[Addiction] You must enter a valid addiction!");
+                    return true;
+                }
+            }
 
             assert player != null;
             if (Addiction.getPlugin().addicts.containsKey(player.getUniqueId())) {
