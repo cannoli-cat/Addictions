@@ -12,7 +12,18 @@ public class ClearAddictions implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         if (command.getName().equalsIgnoreCase("clearaddictions") && strings.length == 1) {
-            Player player = Bukkit.getServer().getPlayer(strings[0]);
+            Player player;
+            try {
+                player = Bukkit.getServer().getPlayer(strings[0]);
+            } catch (IllegalArgumentException e) {
+                if(commandSender instanceof Player) {
+                    commandSender.sendMessage(ChatColor.RED + "You must enter a valid player!");
+                    return true;
+                } else {
+                    Bukkit.getLogger().warning("[Addiction] You must enter a valid player!");
+                    return true;
+                }
+            }
 
             assert player != null;
             if (Addiction.getPlugin().addicts.containsKey(player.getUniqueId())) {
@@ -25,8 +36,8 @@ public class ClearAddictions implements CommandExecutor {
 
                 for(int id : Addiction.getPlugin().ids.get(player).values()) {
                     Bukkit.getScheduler().cancelTask(id);
-                    player.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "Congratulations! You are no longer an addict!");
                 }
+                player.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "Congratulations! You are no longer an addict!");
 
                 Addiction.getPlugin().ids.remove(player);
             } else {

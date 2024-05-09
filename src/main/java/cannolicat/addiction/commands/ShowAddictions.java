@@ -13,9 +13,20 @@ public class ShowAddictions implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         if(command.getName().equalsIgnoreCase("showaddictions") && strings.length == 1) {
-            Player search = Bukkit.getServer().getPlayer(strings[0]);
-            assert search != null;
+            Player search;
+            try {
+                search = Bukkit.getServer().getPlayer(strings[0]);
+            } catch (IllegalArgumentException e) {
+                if(commandSender instanceof Player) {
+                    commandSender.sendMessage(ChatColor.RED + "You must enter a valid player!");
+                    return true;
+                } else {
+                    Bukkit.getLogger().warning("[Addiction] You must enter a valid player!");
+                    return true;
+                }
+            }
 
+            assert search != null;
             if(Addiction.getPlugin().addicts.containsKey(search.getUniqueId())) {
                 StringBuilder message = new StringBuilder(search.getDisplayName() + "'s addictions: ");
                 for(Addictions addiction : Addiction.getPlugin().addicts.get(search.getUniqueId()).keySet()) {
