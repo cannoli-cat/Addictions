@@ -28,7 +28,7 @@ public class ShowAddictions implements CommandExecutor {
 
             assert search != null;
             if(Addiction.getPlugin().addicts.containsKey(search.getUniqueId())) {
-                StringBuilder message = new StringBuilder(search.getDisplayName() + "'s addictions: ");
+            StringBuilder message = new StringBuilder(ChatColor.RED + "" + ChatColor.BOLD + "[Addiction] " + ChatColor.RESET + search.getDisplayName() + "'s addictions: ");
                 for(Addictions addiction : Addiction.getPlugin().addicts.get(search.getUniqueId()).keySet()) {
                     message.append(ChatColor.GOLD + addiction.toString()).append(ChatColor.RESET + ", ");
                 }
