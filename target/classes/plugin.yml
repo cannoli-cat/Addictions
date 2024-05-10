@@ -19,3 +19,7 @@ commands:
     description: View a players current addictions!
     permission: addiction.show
     usage: /<command> <player>
+  updatedate:
+    description: Update an addictions time since last use for a player!
+    permission: addiction.update
+    usage: /<command> <player> <addiction>

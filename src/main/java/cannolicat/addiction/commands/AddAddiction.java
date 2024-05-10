@@ -62,7 +62,7 @@ public class AddAddiction implements CommandExecutor, TabCompleter, AddictedList
                     if(commandSender instanceof Player)
                         commandSender.sendMessage(player.getDisplayName() + ChatColor.GREEN + " is now addicted to " + ChatColor.RED + addictionToAdd + ChatColor.RESET + "!");
                     else
-                        Bukkit.getLogger().info("[Addiction] " + player.getDisplayName() + " is now addicted to " + addictionToAdd + "!");
+                        Bukkit.getLogger().info("[Addiction] " + player.getName() + " is now addicted to " + addictionToAdd + "!");
                     Addiction.addicted.triggerAddiction(player, data);
                 }
             } else {

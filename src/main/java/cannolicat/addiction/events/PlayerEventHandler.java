@@ -54,7 +54,7 @@ public class PlayerEventHandler implements Listener {
                             "You are no longer addicted to " + data.getKey().toString().toLowerCase() + "!");
                     Addiction.getPlugin().removeAddiction(p, data.getKey());
                 }
-            }, i * new Random().nextLong(6000), 36000);
+            }, i * (long) new Random().nextInt(6000), 36000); //maybe save time since last use?
             ids.put(data.getKey(), id);
             i++;
         }
