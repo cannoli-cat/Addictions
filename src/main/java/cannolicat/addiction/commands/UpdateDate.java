@@ -52,12 +52,10 @@ public class UpdateDate implements CommandExecutor, TabCompleter {
                 if (contains) {
                     Addiction.getPlugin().addicts.get(player.getUniqueId()).get(addictionToUpdate).setDate(new Date());
                     if(commandSender instanceof Player)
-                        commandSender.sendMessage(ChatColor.RED + "Time since last use for " + addictionToUpdate + " updated for " + player.getDisplayName());
+                commandSender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "[Addiction]" + ChatColor.RESET +"Time since last use for " + ChatColor.GOLD + addictionToUpdate + ChatColor.RESET + " updated for " + player.getDisplayName());
                 } else {
                     if(commandSender instanceof Player)
                         commandSender.sendMessage(player.getDisplayName() + ChatColor.GREEN + " is not addicted to " + ChatColor.RED + addictionToUpdate + ChatColor.RESET + "!");
-                    else
-                        Bukkit.getLogger().info("[Addiction] " + player.getName() + " is not addicted to " + addictionToUpdate + "!");
                 }
             }
             else {
