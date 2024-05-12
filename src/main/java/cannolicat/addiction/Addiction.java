@@ -61,6 +61,7 @@ public final class Addiction extends JavaPlugin {
             else Bukkit.getLogger().severe("[Addiction] Could not save data!");
         } else {
             Bukkit.getLogger().info("[Addiction] Addicts list is empty, cancelling save...");
+            file.delete();
         }
     }
 
