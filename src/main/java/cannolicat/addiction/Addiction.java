@@ -10,9 +10,10 @@ import cannolicat.addiction.mechanics.RemoveAddictions;
 import cannolicat.addiction.mechanics.UpdateAddict;
 import io.lumine.mythic.bukkit.events.MythicConditionLoadEvent;
 import io.lumine.mythic.bukkit.events.MythicMechanicLoadEvent;
-import io.lumine.mythic.bukkit.utils.Events;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -20,7 +21,7 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.UUID;
 
-public final class Addiction extends JavaPlugin {
+public final class Addiction extends JavaPlugin implements Listener {
     public HashMap<UUID, HashMap<Addictions, AddictionData>> addicts = new HashMap<>();
     public HashMap<Player, HashMap<Addictions, Integer>> ids = new HashMap<>();
     private static Addiction plugin;
@@ -38,33 +39,8 @@ public final class Addiction extends JavaPlugin {
         getCommand("clearAddictions").setExecutor(new ClearAddictions());
         getCommand("updatedate").setExecutor(new UpdateDate());
 
+        getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new PlayerEventHandler(), this);
-
-        if(getServer().getPluginManager().getPlugin("MythicMobs") == null) {
-            Bukkit.getLogger().warning("[Addiction] MythicMobs is not installed! Disabling Mythic functionality!");
-        } else {
-            Events.subscribe(MythicMechanicLoadEvent.class).handler(event -> {
-                switch (event.getMechanicName().toUpperCase()) {
-                    case "ADDICTIONADD", "ADDADDICTION", "ADDADDICT", "ADDICT" ->
-                            event.register(new Addict(event.getConfig()));
-                    case "UPDATEADDICTION", "USEDADDICTION", "USED", "UPDATEADDICT" ->
-                            event.register(new UpdateAddict(event.getConfig()));
-                    case "CLEARADDICTIONS", "REMOVEADDICT", "CLEARADDICT", "REMOVEADDICTIONS" ->
-                            event.register(new RemoveAddictions());
-                    default -> {}
-                }
-            });
-
-            Events.subscribe(MythicConditionLoadEvent.class).handler(event -> {
-               switch (event.getConditionName().toUpperCase()) {
-                   case "HASADDICTION", "ISADDICTED" ->
-                           event.register(new HasAddiction(event.getConfig()));
-                   case "ISADDICT", "ADDICT" ->
-                           event.register(new IsAddict());
-                   default -> {}
-               }
-            });
-        }
 
         addicted = new Addicted();
         addicted.addListener(addiction);
@@ -153,6 +129,30 @@ public final class Addiction extends JavaPlugin {
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    @EventHandler
+    public void onMythicMechanicLoad(MythicMechanicLoadEvent event)	{
+        switch (event.getMechanicName().toUpperCase()) {
+            case "ADDICTIONADD", "ADDADDICTION", "ADDADDICT", "ADDICT" ->
+                    event.register(new Addict(event.getConfig()));
+            case "UPDATEADDICTION", "USEDADDICTION", "USED", "UPDATEADDICT" ->
+                    event.register(new UpdateAddict(event.getConfig()));
+            case "CLEARADDICTIONS", "REMOVEADDICT", "CLEARADDICT", "REMOVEADDICTIONS" ->
+                    event.register(new RemoveAddictions());
+            default -> {}
+        }
+    }
+
+    @EventHandler
+    public void onMythicConditionLoad(MythicConditionLoadEvent event) {
+        switch (event.getConditionName().toUpperCase()) {
+            case "HASADDICTION", "ISADDICTED" ->
+                    event.register(new HasAddiction(event.getConfig()));
+            case "ISADDICT", "ADDICT" ->
+                    event.register(new IsAddict());
+            default -> {}
         }
     }
 }
