@@ -1,8 +1,16 @@
 package cannolicat.addiction;
 
 import cannolicat.addiction.commands.*;
+import cannolicat.addiction.conditions.HasAddiction;
+import cannolicat.addiction.conditions.IsAddict;
 import cannolicat.addiction.events.Addicted;
 import cannolicat.addiction.events.PlayerEventHandler;
+import cannolicat.addiction.mechanics.Addict;
+import cannolicat.addiction.mechanics.RemoveAddictions;
+import cannolicat.addiction.mechanics.UpdateAddict;
+import io.lumine.mythic.bukkit.events.MythicConditionLoadEvent;
+import io.lumine.mythic.bukkit.events.MythicMechanicLoadEvent;
+import io.lumine.mythic.bukkit.utils.Events;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,6 +39,32 @@ public final class Addiction extends JavaPlugin {
         getCommand("updatedate").setExecutor(new UpdateDate());
 
         getServer().getPluginManager().registerEvents(new PlayerEventHandler(), this);
+
+        if(getServer().getPluginManager().getPlugin("MythicMobs") == null) {
+            Bukkit.getLogger().warning("[Addiction] MythicMobs is not installed! Disabling Mythic functionality!");
+        } else {
+            Events.subscribe(MythicMechanicLoadEvent.class).handler(event -> {
+                switch (event.getMechanicName().toUpperCase()) {
+                    case "ADDICTIONADD", "ADDADDICTION", "ADDADDICT", "ADDICT" ->
+                            event.register(new Addict(event.getConfig()));
+                    case "UPDATEADDICTION", "USEDADDICTION", "USED", "UPDATEADDICT" ->
+                            event.register(new UpdateAddict(event.getConfig()));
+                    case "CLEARADDICTIONS", "REMOVEADDICT", "CLEARADDICT", "REMOVEADDICTIONS" ->
+                            event.register(new RemoveAddictions());
+                    default -> {}
+                }
+            });
+
+            Events.subscribe(MythicConditionLoadEvent.class).handler(event -> {
+               switch (event.getConditionName().toUpperCase()) {
+                   case "HASADDICTION", "ISADDICTED" ->
+                           event.register(new HasAddiction(event.getConfig()));
+                   case "ISADDICT", "ADDICT" ->
+                           event.register(new IsAddict());
+                   default -> {}
+               }
+            });
+        }
 
         addicted = new Addicted();
         addicted.addListener(addiction);
