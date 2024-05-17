@@ -1,4 +1,4 @@
-package cannolicat.addiction;
+package cannolicat.addiction.addict;
 
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;

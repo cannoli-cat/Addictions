@@ -1,7 +1,8 @@
 package cannolicat.addiction.commands;
 
 import cannolicat.addiction.Addiction;
-import cannolicat.addiction.Addictions;
+import cannolicat.addiction.addict.Addict;
+import cannolicat.addiction.addict.Addictions;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.*;
@@ -42,19 +43,16 @@ public class RemoveAddiction implements CommandExecutor, TabCompleter {
             }
 
             assert player != null;
-            if (Addiction.getPlugin().addicts.containsKey(player.getUniqueId())) {
-                if(Addiction.getPlugin().addicts.get(player.getUniqueId()).containsKey(addictionToRemove)) {
-                    if(Addiction.getPlugin().addicts.get(player.getUniqueId()).size() > 1)
-                        Addiction.getPlugin().addicts.get(player.getUniqueId()).remove(addictionToRemove);
-                    else
-                        Addiction.getPlugin().addicts.remove(player.getUniqueId());
+            Addict addict = Addiction.inst().getAddict(player.getUniqueId());
+            if (addict != null) {
+                if(addict.hasAddiction(addictionToRemove)) {
+                    addict.removeAddiction(addictionToRemove);
 
                     if(commandSender instanceof Player)
                         commandSender.sendMessage(player.getDisplayName() + ChatColor.GREEN + " has had their " + addictionToRemove + " addiction removed!");
                     else
                         Bukkit.getLogger().info("[Addiction] " + player.getName() + " has had their " + addictionToRemove + " addiction removed!");
 
-                    Bukkit.getScheduler().cancelTask(Addiction.getPlugin().ids.get(player).get(addictionToRemove));
                     player.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC +
                             "You are no longer addicted to " + addictionToRemove + "!");
                 } else {

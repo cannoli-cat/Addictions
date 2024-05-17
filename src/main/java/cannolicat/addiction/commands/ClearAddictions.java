@@ -1,6 +1,7 @@
 package cannolicat.addiction.commands;
 
 import cannolicat.addiction.Addiction;
+import cannolicat.addiction.addict.Addict;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -27,20 +28,16 @@ public class ClearAddictions implements CommandExecutor {
             }
 
             assert player != null;
-            if (Addiction.getPlugin().addicts.containsKey(player.getUniqueId())) {
-                Addiction.getPlugin().addicts.remove(player.getUniqueId());
+            Addict addict = Addiction.inst().getAddict(player.getUniqueId());
+            if (addict != null) {
+                addict.remove();
 
                 if(commandSender instanceof Player)
                     commandSender.sendMessage(player.getDisplayName() + ChatColor.GREEN + "'s addictions have been cleared!");
                 else
                     Bukkit.getLogger().info("[Addiction] " + player.getName() + "'s addictions have been cleared!");
 
-                for(int id : Addiction.getPlugin().ids.get(player).values()) {
-                    Bukkit.getScheduler().cancelTask(id);
-                }
                 player.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "Congratulations! You are no longer an addict!");
-
-                Addiction.getPlugin().ids.remove(player);
             } else {
                 if (commandSender instanceof Player)
                     commandSender.sendMessage(ChatColor.RED + "This player is not an addict!");

@@ -11,10 +11,8 @@ public class IsAddict implements IEntityCondition {
     @Override
     public boolean check(AbstractEntity abstractEntity) {
         LivingEntity livingEntity = (LivingEntity) BukkitAdapter.adapt(abstractEntity);
-        if (livingEntity instanceof Player) {
-            Player player = (Player) livingEntity;
-            return Addiction.getPlugin().addicts.containsKey(player.getUniqueId());
-        }
+        if (livingEntity instanceof Player)
+            return Addiction.inst().getAddict(livingEntity.getUniqueId()) != null;
         return false;
     }
 }

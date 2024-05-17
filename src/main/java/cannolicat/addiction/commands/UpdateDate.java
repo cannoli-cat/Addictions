@@ -1,7 +1,8 @@
 package cannolicat.addiction.commands;
 
 import cannolicat.addiction.Addiction;
-import cannolicat.addiction.Addictions;
+import cannolicat.addiction.addict.Addict;
+import cannolicat.addiction.addict.Addictions;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.*;
@@ -43,14 +44,10 @@ public class UpdateDate implements CommandExecutor, TabCompleter {
             }
 
             assert player != null;
-            if (Addiction.getPlugin().addicts.containsKey(player.getUniqueId())) {
-                boolean contains = false;
-                for (Addictions addiction : Addiction.getPlugin().addicts.get(player.getUniqueId()).keySet()) {
-                    contains = addiction.equals(addictionToUpdate);
-                    if (contains) break;
-                }
-                if (contains) {
-                    Addiction.getPlugin().addicts.get(player.getUniqueId()).get(addictionToUpdate).setDate(new Date());
+            Addict addict = Addiction.inst().getAddict(player.getUniqueId());
+            if (addict != null) {
+                if (addict.hasAddiction(addictionToUpdate)) {
+                   addict.dataAt(addictionToUpdate).setDate(new Date());
                     if(commandSender instanceof Player)
                         commandSender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "[Addiction]" + ChatColor.RESET +" Time since last use for " + ChatColor.GOLD + addictionToUpdate + ChatColor.RESET + " updated for " + player.getDisplayName());
                 } else {

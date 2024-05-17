@@ -1,7 +1,6 @@
-package cannolicat.addiction.events;
+package cannolicat.addiction.listeners;
 
-import cannolicat.addiction.AddictionData;
-import cannolicat.addiction.interfaces.AddictedListener;
+import cannolicat.addiction.addict.AddictionData;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;

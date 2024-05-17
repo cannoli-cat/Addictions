@@ -1,11 +1,13 @@
 package cannolicat.addiction;
 
+import cannolicat.addiction.addict.Addict;
+import cannolicat.addiction.addict.Addictions;
 import cannolicat.addiction.commands.*;
 import cannolicat.addiction.conditions.HasAddiction;
 import cannolicat.addiction.conditions.IsAddict;
-import cannolicat.addiction.events.Addicted;
-import cannolicat.addiction.events.PlayerEventHandler;
-import cannolicat.addiction.mechanics.Addict;
+import cannolicat.addiction.listeners.Addicted;
+import cannolicat.addiction.listeners.PlayerEventHandler;
+import cannolicat.addiction.mechanics.AddictTo;
 import cannolicat.addiction.mechanics.RemoveAddictions;
 import cannolicat.addiction.mechanics.UpdateAddict;
 import io.lumine.mythic.bukkit.events.MythicConditionLoadEvent;
@@ -15,25 +17,25 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
 public final class Addiction extends JavaPlugin implements Listener {
-    public HashMap<UUID, HashMap<Addictions, AddictionData>> addicts = new HashMap<>();
+    public ArrayList<Addict> addicts = new ArrayList<>();
     public HashMap<Player, HashMap<Addictions, Integer>> ids = new HashMap<>();
-    private static Addiction plugin;
+    private static Addiction inst;
     public static Addicted addicted;
     private static final File file = new File("plugins" + File.separator + "Addiction" + File.separator + "addictions.ser");
 
     @Override
     public void onEnable() {
-        plugin = this;
-        AddAddiction addiction = new AddAddiction();
+        inst = this;
+        AddAddiction addAddiction = new AddAddiction();
 
-        getCommand("addaddiction").setExecutor(addiction);
+        getCommand("addaddiction").setExecutor(addAddiction);
         getCommand("showaddictions").setExecutor(new ShowAddictions());
         getCommand("removeaddiction").setExecutor(new RemoveAddiction());
         getCommand("clearAddictions").setExecutor(new ClearAddictions());
@@ -43,7 +45,7 @@ public final class Addiction extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new PlayerEventHandler(), this);
 
         addicted = new Addicted();
-        addicted.addListener(addiction);
+        addicted.addListener(addAddiction);
 
         if(file.exists()) {
             Bukkit.getLogger().info("[Addiction] Found saved data... attempting to load...");
@@ -75,25 +77,8 @@ public final class Addiction extends JavaPlugin implements Listener {
         }
     }
 
-    public static Addiction getPlugin() {
-        return plugin;
-    }
-
-    public void removeAddiction(@NonNull Player p, @NonNull Addictions addictionToRemove) {
-        if (addicts.containsKey(p.getUniqueId())) {
-            if(addicts.get(p.getUniqueId()).containsKey(addictionToRemove)) {
-                if(addicts.get(p.getUniqueId()).size() > 1) addicts.get(p.getUniqueId()).remove(addictionToRemove);
-                else addicts.remove(p.getUniqueId());
-                Bukkit.getScheduler().cancelTask(ids.get(p).get(addictionToRemove));
-                return;
-            }
-            else {
-                Bukkit.getLogger().warning("[Addiction] Failed to remove addiction from " + p.getName() + ". This player does not have this addiction!");
-                return;
-            }
-        }
-
-        Bukkit.getLogger().warning("[Addiction] Failed to remove addiction! " + p.getName() + " is not an addict!");
+    public static Addiction inst() {
+        return inst;
     }
 
     private boolean saveAddicts() {
@@ -112,15 +97,15 @@ public final class Addiction extends JavaPlugin implements Listener {
         }
     }
 
-    private HashMap<UUID, HashMap<Addictions, AddictionData>> loadAddicts() {
-        HashMap<UUID, HashMap<Addictions, AddictionData>> list;
+    private ArrayList<Addict> loadAddicts() {
+        ArrayList<Addict> list;
 
         try {
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
 
-            if(file.length() != 0) list = (HashMap<UUID, HashMap<Addictions, AddictionData>>) ois.readObject();
-            else list = new HashMap<>();
+            if(file.length() != 0) list = (ArrayList<Addict>) ois.readObject();
+            else list = new ArrayList<>();
 
             ois.close();
             fis.close();
@@ -136,7 +121,7 @@ public final class Addiction extends JavaPlugin implements Listener {
     public void onMythicMechanicLoad(MythicMechanicLoadEvent event)	{
         switch (event.getMechanicName().toUpperCase()) {
             case "ADDICTIONADD", "ADDADDICTION", "ADDADDICT", "ADDICT" ->
-                    event.register(new Addict(event.getConfig()));
+                    event.register(new AddictTo(event.getConfig()));
             case "UPDATEADDICTION", "USEDADDICTION", "USED", "UPDATEADDICT" ->
                     event.register(new UpdateAddict(event.getConfig()));
             case "CLEARADDICTIONS", "REMOVEADDICT", "CLEARADDICT", "REMOVEADDICTIONS" ->
@@ -154,5 +139,12 @@ public final class Addiction extends JavaPlugin implements Listener {
                     event.register(new IsAddict());
             default -> {}
         }
+    }
+
+    public Addict getAddict(UUID uuid) {
+        for(Addict a : addicts) {
+            if(a.getUniqueId().equals(uuid)) return a;
+        }
+        return null;
     }
 }

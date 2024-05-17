@@ -1,7 +1,8 @@
 package cannolicat.addiction.conditions;
 
 import cannolicat.addiction.Addiction;
-import cannolicat.addiction.Addictions;
+import cannolicat.addiction.addict.Addict;
+import cannolicat.addiction.addict.Addictions;
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.conditions.IEntityCondition;
@@ -20,8 +21,8 @@ public class HasAddiction implements IEntityCondition {
     public boolean check(AbstractEntity abstractEntity) {
         LivingEntity livingEntity = (LivingEntity) BukkitAdapter.adapt(abstractEntity);
         if (livingEntity instanceof Player) {
-            Player player = (Player) livingEntity;
-            return Addiction.getPlugin().addicts.containsKey(player.getUniqueId()) && Addiction.getPlugin().addicts.get(player.getUniqueId()).containsKey(addiction);
+            Addict addict = Addiction.inst().getAddict(livingEntity.getUniqueId());
+            return addict != null && addict.hasAddiction(addiction);
         }
         return false;
     }
