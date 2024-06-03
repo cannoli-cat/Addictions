@@ -37,11 +37,10 @@ public class AddAddiction implements CommandExecutor, TabCompleter, AddictedList
             } catch (IllegalArgumentException e) {
                 if(commandSender instanceof Player) {
                     commandSender.sendMessage(ChatColor.RED + "You must enter a valid addiction!");
-                    return true;
                 } else {
                     Bukkit.getLogger().warning("[Addiction] You must enter a valid addiction!");
-                    return true;
                 }
+                return true;
             }
 
             assert player != null;

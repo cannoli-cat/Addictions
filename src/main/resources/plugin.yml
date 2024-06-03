@@ -1,5 +1,6 @@
 name: Addiction
-version: '${project.version}'
+author: cannoli_cat
+version: 1.1.0
 main: cannolicat.addiction.Addiction
 api-version: '1.20'
 commands:

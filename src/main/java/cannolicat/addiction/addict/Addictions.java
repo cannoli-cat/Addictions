@@ -41,6 +41,15 @@ public enum Addictions {
             new PotionEffect(PotionEffectType.WEAKNESS, 1200, 1),
             new PotionEffect(PotionEffectType.SLOW, 800, 1),
             new PotionEffect(PotionEffectType.HUNGER, 1200, 1)
+    }),
+    JET(new PotionEffect[]{
+            new PotionEffect(PotionEffectType.WEAKNESS, 1200, 1),
+            new PotionEffect(PotionEffectType.SLOW, 1200, 0),
+            new PotionEffect(PotionEffectType.BLINDNESS, 600, 0),
+    }),
+    MENTATS(new PotionEffect[]{
+            new PotionEffect(PotionEffectType.BLINDNESS, 300, 0),
+            new PotionEffect(PotionEffectType.SLOW_DIGGING, 600, 0),
     });
 
     private final PotionEffect[] effects;
