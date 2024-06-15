@@ -1,11 +1,7 @@
 package cannolicat.addictions.addict;
 
 import cannolicat.addictions.Addictions;
-import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Registry;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.io.Serial;
 import java.io.Serializable;

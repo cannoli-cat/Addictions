@@ -4,9 +4,6 @@ import cannolicat.addictions.Addictions;
 import cannolicat.addictions.addict.Addict;
 import cannolicat.addictions.addict.Addiction;
 import cannolicat.addictions.addict.AddictionData;
-import cannolicat.addictions.listeners.Addicted;
-import cannolicat.addictions.listeners.AddictedListener;
-import com.google.common.collect.PeekingIterator;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -15,7 +12,6 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 public class Reload implements CommandExecutor {
     @Override
