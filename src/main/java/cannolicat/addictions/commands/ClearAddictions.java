@@ -1,7 +1,7 @@
-package cannolicat.addiction.commands;
+package cannolicat.addictions.commands;
 
-import cannolicat.addiction.Addiction;
-import cannolicat.addiction.addict.Addict;
+import cannolicat.addictions.Addictions;
+import cannolicat.addictions.addict.Addict;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -28,7 +28,7 @@ public class ClearAddictions implements CommandExecutor {
             }
 
             assert player != null;
-            Addict addict = Addiction.inst().getAddict(player.getUniqueId());
+            Addict addict = Addictions.inst().getAddict(player.getUniqueId()).orElse(null);
             if (addict != null) {
                 addict.remove();
 

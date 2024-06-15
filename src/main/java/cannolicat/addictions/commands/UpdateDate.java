@@ -1,8 +1,9 @@
-package cannolicat.addiction.commands;
+package cannolicat.addictions.commands;
 
-import cannolicat.addiction.Addiction;
-import cannolicat.addiction.addict.Addict;
-import cannolicat.addiction.addict.Addictions;
+import cannolicat.addictions.Addictions;
+import cannolicat.addictions.addict.Addict;
+import cannolicat.addictions.addict.Addiction;
+import cannolicat.addictions.addict.AddictionData;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.*;
@@ -30,29 +31,30 @@ public class UpdateDate implements CommandExecutor, TabCompleter {
                 }
             }
 
-            Addictions addictionToUpdate;
-            try {
-                addictionToUpdate = Addictions.valueOf(strings[1].toUpperCase());
-            } catch (IllegalArgumentException e) {
+            Addiction addictionToUpdate;
+
+            if(Addictions.getAddiction(strings[1]).isPresent()) {
+                addictionToUpdate = Addictions.getAddiction(strings[1]).get();
+            } else {
                 if(commandSender instanceof Player) {
                     commandSender.sendMessage(ChatColor.RED + "You must enter a valid addiction!");
-                    return true;
                 } else {
                     Bukkit.getLogger().warning("[Addiction] You must enter a valid addiction!");
-                    return true;
                 }
+
+                return true;
             }
 
             assert player != null;
-            Addict addict = Addiction.inst().getAddict(player.getUniqueId());
+            Addict addict = Addictions.inst().getAddict(player.getUniqueId()).orElse(null);
             if (addict != null) {
-                if (addict.hasAddiction(addictionToUpdate)) {
-                   addict.dataAt(addictionToUpdate).setDate(new Date());
+                if (addict.hasAddiction(addictionToUpdate) && addict.dataAt(addictionToUpdate).isPresent()) {
+                   addict.dataAt(addictionToUpdate).get().setDate(new Date());
                     if(commandSender instanceof Player)
-                        commandSender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "[Addiction]" + ChatColor.RESET +" Time since last use for " + ChatColor.GOLD + addictionToUpdate + ChatColor.RESET + " updated for " + player.getDisplayName());
+                        commandSender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "[Addiction]" + ChatColor.RESET +" Time since last use for " + ChatColor.GOLD + addictionToUpdate.getName().toLowerCase() + ChatColor.RESET + " updated for " + player.getDisplayName());
                 } else {
                     if(commandSender instanceof Player)
-                        commandSender.sendMessage(player.getDisplayName() + ChatColor.GREEN + " is not addicted to " + ChatColor.RED + addictionToUpdate + ChatColor.RESET + "!");
+                        commandSender.sendMessage(player.getDisplayName() + ChatColor.GREEN + " is not addicted to " + ChatColor.RED + addictionToUpdate.getName().toLowerCase() + ChatColor.RESET + "!");
                 }
             }
             else {
@@ -77,9 +79,12 @@ public class UpdateDate implements CommandExecutor, TabCompleter {
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
         if(strings.length == 2) {
             ArrayList<String> list = new ArrayList<>();
-            for(Addictions addiction : EnumSet.allOf(Addictions.class))
-                list.add(addiction.toString());
-            return list;
+            if(Addictions.inst().getAddict(Bukkit.getPlayer(strings[0]).getUniqueId()).isPresent()) {
+                for (AddictionData datum : Addictions.inst().getAddict(Bukkit.getPlayer(strings[0]).getUniqueId()).get().getData()) {
+                    list.add(datum.getAddiction().getName());
+                }
+            }
+            return list.isEmpty() ? null : list;
         }
         return null;
     }

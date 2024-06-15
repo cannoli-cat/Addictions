@@ -1,6 +1,6 @@
-package cannolicat.addiction.listeners;
+package cannolicat.addictions.listeners;
 
-import cannolicat.addiction.addict.AddictionData;
+import cannolicat.addictions.addict.AddictionData;
 import org.bukkit.entity.Player;
 
 public interface AddictedListener {

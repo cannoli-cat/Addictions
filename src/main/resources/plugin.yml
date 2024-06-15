@@ -1,8 +1,9 @@
-name: Addiction
+name: Addictions
 author: cannoli_cat
-version: 1.1.0
-main: cannolicat.addiction.Addiction
+version: 2.0.0
+main: cannolicat.addictions.Addictions
 api-version: '1.20'
+softdepend: [MythicMobs]
 commands:
   addAddiction:
     description: Add an addiction to a player!
@@ -24,3 +25,7 @@ commands:
     description: Update an addictions time since last use for a player!
     permission: addiction.update
     usage: /<command> <player> <addiction>
+  addictionReload:
+    description: Reloads the plugin
+    permission: addiction.admin
+    usage: /<command>

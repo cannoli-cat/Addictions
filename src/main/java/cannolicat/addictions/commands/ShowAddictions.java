@@ -1,7 +1,7 @@
-package cannolicat.addiction.commands;
+package cannolicat.addictions.commands;
 
-import cannolicat.addiction.Addiction;
-import cannolicat.addiction.addict.Addict;
+import cannolicat.addictions.Addictions;
+import cannolicat.addictions.addict.Addict;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -28,11 +28,12 @@ public class ShowAddictions implements CommandExecutor {
             }
 
             assert search != null;
-            Addict addict = Addiction.inst().getAddict(search.getUniqueId());
+            Addict addict = Addictions.inst().getAddict(search.getUniqueId()).orElse(null);
+
             if(addict != null) {
             StringBuilder message = new StringBuilder(ChatColor.RED + "" + ChatColor.BOLD + "[Addiction] " + ChatColor.RESET + search.getDisplayName() + "'s addictions: ");
                 for(int i = 0; i < addict.getData().size(); i++) {
-                    message.append(ChatColor.GOLD + addict.getData().get(i).getAddiction().toString()).append(ChatColor.RESET + ", ");
+                    message.append(ChatColor.GOLD + addict.getData().get(i).getAddiction().getName()).append(ChatColor.RESET + ", ");
                 }
 
                 message.deleteCharAt(message.length() - 1);

@@ -1,15 +1,15 @@
-package cannolicat.addiction.commands;
+package cannolicat.addictions.commands;
 
-import cannolicat.addiction.Addiction;
-import cannolicat.addiction.addict.Addict;
-import cannolicat.addiction.addict.Addictions;
+import cannolicat.addictions.Addictions;
+import cannolicat.addictions.addict.Addict;
+import cannolicat.addictions.addict.Addiction;
+import cannolicat.addictions.addict.AddictionData;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
 
 public class RemoveAddiction implements CommandExecutor, TabCompleter {
@@ -29,37 +29,38 @@ public class RemoveAddiction implements CommandExecutor, TabCompleter {
                 }
             }
 
-            Addictions addictionToRemove;
-            try {
-                addictionToRemove = Addictions.valueOf(strings[1].toUpperCase());
-            } catch (IllegalArgumentException e) {
+            Addiction addictionToRemove;
+
+            if(Addictions.getAddiction(strings[1]).isPresent()) {
+                addictionToRemove = Addictions.getAddiction(strings[1]).get();
+            } else {
                 if(commandSender instanceof Player) {
                     commandSender.sendMessage(ChatColor.RED + "You must enter a valid addiction!");
-                    return true;
                 } else {
                     Bukkit.getLogger().warning("[Addiction] You must enter a valid addiction!");
-                    return true;
                 }
+
+                return true;
             }
 
             assert player != null;
-            Addict addict = Addiction.inst().getAddict(player.getUniqueId());
+            Addict addict = Addictions.inst().getAddict(player.getUniqueId()).orElse(null);
             if (addict != null) {
                 if(addict.hasAddiction(addictionToRemove)) {
                     addict.removeAddiction(addictionToRemove);
 
                     if(commandSender instanceof Player)
-                        commandSender.sendMessage(player.getDisplayName() + ChatColor.GREEN + " has had their " + addictionToRemove + " addiction removed!");
+                        commandSender.sendMessage(player.getDisplayName() + ChatColor.GREEN + " has had their " + addictionToRemove.getName().toLowerCase() + " addiction removed!");
                     else
-                        Bukkit.getLogger().info("[Addiction] " + player.getName() + " has had their " + addictionToRemove + " addiction removed!");
+                        Bukkit.getLogger().info("[Addiction] " + player.getName() + " has had their " + addictionToRemove.getName().toLowerCase() + " addiction removed!");
 
                     player.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC +
-                            "You are no longer addicted to " + addictionToRemove + "!");
+                            "You are no longer addicted to " + addictionToRemove.getName().toLowerCase() + "!");
                 } else {
                     if(commandSender instanceof Player)
-                        commandSender.sendMessage(player.getDisplayName() + ChatColor.RED + " does not have a " + addictionToRemove + " addiction!");
+                        commandSender.sendMessage(player.getDisplayName() + ChatColor.RED + " does not have a " + addictionToRemove.getName().toLowerCase() + " addiction!");
                     else
-                        Bukkit.getLogger().warning("[Addiction] " + player.getName() + " does not have a " + addictionToRemove + " addiction!");
+                        Bukkit.getLogger().warning("[Addiction] " + player.getName() + " does not have a " + addictionToRemove.getName().toLowerCase() + " addiction!");
                 }
             } else {
                 if (commandSender instanceof Player)
@@ -83,9 +84,12 @@ public class RemoveAddiction implements CommandExecutor, TabCompleter {
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
         if(strings.length == 2) {
             ArrayList<String> list = new ArrayList<>();
-            for(Addictions addiction : EnumSet.allOf(Addictions.class))
-                list.add(addiction.toString());
-            return list;
+            if(Addictions.inst().getAddict(Bukkit.getPlayer(strings[0]).getUniqueId()).isPresent()) {
+                for (AddictionData datum : Addictions.inst().getAddict(Bukkit.getPlayer(strings[0]).getUniqueId()).get().getData()) {
+                    list.add(datum.getAddiction().getName());
+                }
+            }
+            return list.isEmpty() ? null : list;
         }
         return null;
     }

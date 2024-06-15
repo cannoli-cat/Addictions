@@ -1,7 +1,7 @@
-package cannolicat.addiction.mechanics;
+package cannolicat.addictions.mechanics;
 
-import cannolicat.addiction.Addiction;
-import cannolicat.addiction.addict.Addict;
+import cannolicat.addictions.Addictions;
+import cannolicat.addictions.addict.Addict;
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.skills.ITargetedEntitySkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
@@ -15,7 +15,7 @@ public class RemoveAddictions implements ITargetedEntitySkill {
     public SkillResult castAtEntity(SkillMetadata skillMetadata, AbstractEntity abstractEntity) {
         LivingEntity livingEntity = (LivingEntity) BukkitAdapter.adapt(abstractEntity);
         if(livingEntity instanceof Player) {
-            Addict addict = Addiction.inst().getAddict(livingEntity.getUniqueId());
+            Addict addict = Addictions.inst().getAddict(livingEntity.getUniqueId()).orElse(null);
             if (addict != null) {
                 addict.remove();
                 return SkillResult.SUCCESS;

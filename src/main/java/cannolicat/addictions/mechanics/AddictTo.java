@@ -1,8 +1,8 @@
-package cannolicat.addiction.mechanics;
+package cannolicat.addictions.mechanics;
 
-import cannolicat.addiction.Addiction;
-import cannolicat.addiction.addict.Addict;
-import cannolicat.addiction.addict.Addictions;
+import cannolicat.addictions.Addictions;
+import cannolicat.addictions.addict.Addict;
+import cannolicat.addictions.addict.Addiction;
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.ITargetedEntitySkill;
@@ -13,17 +13,19 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 public class AddictTo implements ITargetedEntitySkill {
-    protected final Addictions addiction;
+    protected final Addiction addiction;
 
     public AddictTo(MythicLineConfig config) {
-        this.addiction = Addictions.valueOf(config.getString(new String[] {"addiction","a"}, String.valueOf(Addictions.MARIJUANA)));
+        this.addiction = Addictions.getAddiction(config.getString(new String[] {"addiction","a"})).orElse(null);
     }
 
     @Override
     public SkillResult castAtEntity(SkillMetadata skillMetadata, AbstractEntity abstractEntity) {
+        if (addiction == null) return SkillResult.ERROR;
+
         LivingEntity livingEntity = (LivingEntity) BukkitAdapter.adapt(abstractEntity);
         if (livingEntity instanceof Player) {
-            Addict addict = Addiction.inst().getAddict(livingEntity.getUniqueId());
+            Addict addict = Addictions.inst().getAddict(livingEntity.getUniqueId()).orElse(null);
 
             if (addict != null)
                 addict.addAddiction(addiction);

@@ -1,13 +1,13 @@
-package cannolicat.addiction.listeners;
+package cannolicat.addictions.listeners;
 
-import cannolicat.addiction.addict.AddictionData;
+import cannolicat.addictions.addict.AddictionData;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Addicted {
-    private List<AddictedListener> listeners = new ArrayList<AddictedListener>();
+    private final List<AddictedListener> listeners = new ArrayList<AddictedListener>();
 
     public void addListener(AddictedListener listener) {
         listeners.add(listener);

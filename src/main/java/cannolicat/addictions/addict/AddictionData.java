@@ -1,4 +1,4 @@
-package cannolicat.addiction.addict;
+package cannolicat.addictions.addict;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -8,10 +8,15 @@ public class AddictionData implements Serializable {
     @Serial
     private static final long serialVersionUID = 6529545798267757690L;
     private Date date;
-    private final Addictions addiction;
+    private final Addiction addiction;
 
-    public AddictionData(Addictions addiction) {
+    public AddictionData(Addiction addiction) {
         date = new Date();
+        this.addiction = addiction;
+    }
+
+    public AddictionData(Addiction addiction, Date date) {
+        this.date = date;
         this.addiction = addiction;
     }
 
@@ -23,7 +28,7 @@ public class AddictionData implements Serializable {
         this.date = date;
     }
 
-    public Addictions getAddiction() {
+    public Addiction getAddiction() {
         return addiction;
     }
 }
