@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Addicted {
-    private final List<AddictedListener> listeners = new ArrayList<AddictedListener>();
+    private final List<AddictedListener> listeners = new ArrayList<>();
 
     public void addListener(AddictedListener listener) {
         listeners.add(listener);

@@ -38,7 +38,8 @@ public class Addict implements Serializable {
 
     public Optional<AddictionData> dataAt(Addiction addiction) {
         for (AddictionData datum : data) {
-            if (datum.getAddiction().equals(addiction)) return Optional.of(datum);
+            if (datum.getAddiction().equals(addiction) || datum.getAddiction().getName().equals(addiction.getName()))
+                return Optional.of(datum);
         }
         return Optional.empty();
     }
