@@ -1,6 +1,6 @@
 name: Addictions
 author: cannoli_cat
-version: 2.0.0
+version: 2.0.1
 main: cannolicat.addictions.Addictions
 api-version: '1.20'
 softdepend: [MythicMobs]
